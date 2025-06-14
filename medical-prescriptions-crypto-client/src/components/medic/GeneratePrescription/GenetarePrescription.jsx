@@ -11,7 +11,7 @@ import { signFile } from '../../../services/eddsa/eddsa.service';
 
 function GeneratePrescription({ setView }) {
   const [diagnostico, setDiagnostico] = useState('');
-  const [tratamiento, setTratamiento] = useState([]);
+  const [tratamientoState, setTratamientoState] = useState([]);
   const [privateKey, setPrivateKey] = useState(null);
   const [password, setPassword] = useState('');
   const [openPasswordDialog, setOpenPasswordDialog] = useState(false);
@@ -48,12 +48,15 @@ function GeneratePrescription({ setView }) {
 
   const handlePasswordSubmit = async () => {
     const fechaEmision = new Date().toISOString().split('T')[0];
+
+    const tratamiento = tratamientoState.map(({id, ...rest}) => rest);
+
     const receta = {
-      id_paciente: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
-      id_medico: 'c56a4180-65aa-42ec-a945-5fd21dec0538',
+      id_paciente: '78df21a8-48ab-456e-93ea-b9c965033444',
+      id_medico: '0e4e1348-4637-40c9-a94f-07a53a837bb1',
       fechaEmision,
       diagnostico,
-      tratamiento,
+      tratamiento: tratamiento,
     };
 
     const jsonBuffer = new TextEncoder().encode(JSON.stringify(receta));
@@ -113,7 +116,7 @@ function GeneratePrescription({ setView }) {
           {/* Tratamiento ---------------------- */}
           <Stack direction="column" sx={{ marginTop: '30px', marginBottom: '30px' }}>
             <Subtitle subtitulo='Tratamiento'/>
-            <PrescriptionTreatment value={tratamiento} onChange={setTratamiento} />
+            <PrescriptionTreatment value={tratamientoState} onChange={setTratamientoState} />
           </Stack>
 
           <Divider />
